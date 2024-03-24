@@ -1,17 +1,8 @@
-const { Client } = require("pg");
+require("dotenv").config
+const conn = require("./db/conn");
 
-const client = new Client({
-    user: 'postgres',
-    password: '3112',
-    host: 'localhost',
-    port: '5432',
-    database: 'Maets'  
+conn.authenticate().then(() => {
+    console.log("Parabéns, você está conectado ao Banco de Dados!")
+}).catch((err) => {
+    console.log("Eita!!! Parece que ocorreu o seguinte erro: " + err)
 })
-
-client .connect().then(() => {
-        console.log("Conectando ao banco de dados")
-    }).catch((err) =>{
-        console.log("Errou aqui ó: " + err)
-    });
-
-function 
