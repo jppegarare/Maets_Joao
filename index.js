@@ -2,6 +2,7 @@ require("dotenv").config();
 const conn = require("./db/conn");
 
 const Usuario = require("./models/Usuario")
+const Jogo = require("./models/Jogo")
 
 const express = require("express");
 const app = express();
