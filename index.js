@@ -32,9 +32,33 @@ app.post("/usuarios/novo", async (req, res) => {
     res.send("Usuario inserido sob o id " + usuario.id)
 });
 
+
+
+app.get("/jogo/novo", (req, res) => {
+    res.sendFile(`${__dirname}/views/formJogo.html`);
+});
+
+app.post("/jogo/novo", async (req, res) => {
+    const titulo = req.body.titulo;
+    const descricao = req.body.descricao;
+    const precoBase = req.body.precoBase;
+
+    const dadosJogo = {
+        titulo,
+        descricao,
+        precoBase,
+    };
+
+    const jogo = await Jogo.create(dadosJogo)
+
+    res.send("Jogo inserido sob o id " + jogo.id)
+});
+
 app.listen(8000, () =>{
     console.log("Server rodanddo na porta 8000")
 })
+
+
 conn
 .sync()
 .then(() => {
