@@ -25,13 +25,18 @@ app.get("/", (req, res) => {
     res.render(`home`);
 });
 
-app.get("/usuarios", (req, res) => {
-    res.render(`usuarios`);
+app.get("/usuarios", async (req, res) => {
+    const usuarios = await Usuario.findAll({
+        raw: true
+    }) 
+    res.render(`usuarios`, {usuarios});
 });
 
 app.post("/usuarios/novo", async (req, res) => {
     const nickname = req.body.nickname;
     const nome = req.body.nome;
+
+
 
     const dadosUsuario = {
         nickname,
@@ -64,6 +69,12 @@ app.post("/jogo/novo", async (req, res) => {
 
     res.send("Jogo inserido sob o id " + jogo.id)
 });
+
+app.get("/usuarios/:id/atualizar", async (req, res) => {
+    const id = req.params.id;
+    const usuario = Usuario.findByPk(id, {raw: true});
+    res.render("formUsuario", {usuario})
+})
 
 app.listen(8000, () =>{
     console.log("Server rodanddo na porta 8000")
