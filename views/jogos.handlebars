@@ -1,0 +1,35 @@
+<h1>Jogos</h1>
+
+<a href="/jogos/novo"> Cadastrar Usuarios</a>
+
+<table border="1">
+    <tr>
+        <td>ID</td>
+        <td>Título</td>
+        <td>Descrição</td>
+        <td>Preço</td>
+        <th></th>
+
+    </tr>
+
+    {{#each jogos}}
+
+        <tr>
+            <td>{{ this.id }}</td>
+            <td>{{ this.titulo }}</td>
+            <td>{{ this.descricao }}</td>
+            <td>{{ this.precoBase }}</td>
+            <td>
+                <a href="/jogos/{{this.id}}/atualizar">Atualizar</a>
+
+                <form action="/jogos/excluir" method="post">
+                  
+                    <input type="hidden" value="{{this.id}}"/>
+                    <input type="submit" value="Excluir"/>
+                </form>
+                <a href="/jogos/{{this.id}}/conquistas">Cartoes</a>
+            </td>
+        </tr>
+    {{/each}}
+
+</table>
