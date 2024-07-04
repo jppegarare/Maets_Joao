@@ -2,6 +2,7 @@ require("dotenv").config();
 const conn = require("./db/conn");
 
 const Cartao = require("./models/Cartao")
+const Conquista = require("./models/Conquista")
 const Usuario = require("./models/Usuario")
 const Jogo = require("./models/Jogo")
 const handlebars = require("express-handlebars")
@@ -53,7 +54,7 @@ app.post("/usuarios/novo", async (req, res) => {
 });
 
 app.get("/jogos", async (req, res) => {
-    const usuarios = await Jogo.findAll({
+    const jogos = await Jogo.findAll({
         raw: true
     }) 
     res.render(`jogos`, {jogos});
@@ -89,6 +90,7 @@ app.get("/jogos/:id/atualizar", async (req, res) => {
     res.render("formJogo", {jogo})
 })
 
+//atualizar user
 app.post("/usuarios/:id/atualizar", async (req, res) => {
     const id = req.params.id;
 
@@ -106,7 +108,27 @@ app.post("/usuarios/:id/atualizar", async (req, res) => {
     }
 })
 
-app.post("usuarios/:id/excluir", async (req, res) => {
+//atualizar jogo
+app.post("/jogos/:id/atualizar", async (req, res) => {
+    const id = req.params.id;
+
+    const dadosJogo= {
+        titulo: req.body.titulo,
+        descricao: req.body.descricao,
+        precoBase: req.body.precoBase
+    }
+
+    const registrosAfetados = await Jogo.update(dadosJogo, {where: { id: id }})
+    if (registrosAfetados > 0){
+        res.redirect("/jogos")
+    }
+    else {
+        res.send("Erro ao atualizar o jogo!")
+    }
+})
+
+//excluir user
+app.post("/usuarios/excluir", async (req, res) => {
     const id = parseInt(req.body.id);
 
     const registrosAfetados = await Usuario.destroy ({where: { id: id }})
@@ -118,42 +140,90 @@ app.post("usuarios/:id/excluir", async (req, res) => {
     }
 })
 
+//excluir jogo
+app.post("/jogos/excluir", async (req, res) => {
+    const id = parseInt(req.body.id);
+
+    const registrosAfetados = await Jogo.destroy ({where: { id: id }})
+    if (registrosAfetados > 0){
+        res.redirect("/jogos")
+    }   
+    else {
+        res.send("Erro ao excluir o jogo!")
+    }
+})
+
 //rotas cartoes
 
+//ver cartao
 app.get("/usuarios/:id/cartoes", async (req, res) => {
     const id = parseInt(req.params.id);
-    const usuario = await Usuario.findByPk(id, { raw: true });
+    const usuario = await Usuario.findByPk(id, { include: ["Cartao"] });
+    let cartoes = usuario.Cartao;
+    cartoes = cartoes.map((cartao) => cartao.toJSON())
   
-    const cartoes = await Cartao.findAll({
-      raw: true,
-      where: { UsuarioId: id },
-    });
-  
-    res.render("cartoes.handlebars", { usuario, cartoes });
+    res.render("cartoes", { usuario: usuario.toJSON(), cartoes });
   });
-  
-  //Formulário de cadastro de cartão
+
+  //form cartao
+
   app.get("/usuarios/:id/novoCartao", async (req, res) => {
     const id = parseInt(req.params.id);
     const usuario = await Usuario.findByPk(id, { raw: true });
   
     res.render("formCartao", { usuario });
   });
-  
-  //Cadastro de cartão
+
+  //cadastrar cartao
+
   app.post("/usuarios/:id/novoCartao", async (req, res) => {
     const id = parseInt(req.params.id);
   
     const dadosCartao = {
-      numero: req.body.numero,
-      nome: req.body.nome,
-      codSeguranca: req.body.codSeguranca,
-      UsuarioId: id,
+        numero: req.body.numero,
+        nome: req.body.nome,
+        codSeguranca: req.body.codSeguranca,
+        UsuarioId: id,
     };
   
     await Cartao.create(dadosCartao);
   
     res.redirect(`/usuarios/${id}/cartoes`);
+  });
+
+  //rotas conquistas
+
+  //ver conquistas
+  app.get("/jogos/:id/conquistas", async (req, res) => {
+    const id = parseInt(req.params.id);
+    const jogo = await Jogo.findByPk(id, { include: ["Conquista"] });
+    let conquistas = jogo.Conquista;
+    conquistas = conquistas.map((conquista) => conquista.toJSON())
+  
+    res.render("conquistas", { jogo: jogo.toJSON(), conquistas });
+  });
+
+  //form conquistas
+  app.get("/jogos/:id/novaConquista", async (req, res) => {
+    const id = parseInt(req.params.id);
+    const jogo = await Jogo.findByPk(id, { raw: true });
+  
+    res.render("formConquista", { jogo });
+  });
+
+//cadastro conquista
+app.post("/jogos/:id/novaConquista", async (req, res) => {
+    const id = parseInt(req.params.id);
+  
+    const dadosConquista = {
+      titulo: req.body.titulo,
+      descricao: req.body.descricao,
+      JogoId: id,
+    };
+  
+    await Conquista.create(dadosConquista);
+  
+    res.redirect(`/jogos/${id}/conquistas`);
   });
 
 app.listen(8000, () =>{

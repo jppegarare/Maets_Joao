@@ -1,6 +1,6 @@
 <h1>Jogos</h1>
 
-<a href="/jogos/novo"> Cadastrar Usuarios</a>
+<a href="/jogos/novo"> Cadastrar Jogos</a>
 
 <table border="1">
     <tr>
@@ -24,10 +24,10 @@
 
                 <form action="/jogos/excluir" method="post">
                   
-                    <input type="hidden" value="{{this.id}}"/>
+                    <input type="hidden" value="{{this.id}}" name="id"/>
                     <input type="submit" value="Excluir"/>
                 </form>
-                <a href="/jogos/{{this.id}}/conquistas">Cartoes</a>
+                <a href="/jogos/{{this.id}}/conquistas">Conquista</a>
             </td>
         </tr>
     {{/each}}

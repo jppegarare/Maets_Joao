@@ -1,29 +1,30 @@
 {{#if jogo}}
 
 <h1>Atualizar Cadastro</h1>
-<form action="/jogo/{{jogo.id}}/atualizar" method="post">
+<form action="/jogos/{{jogo.id}}/atualizar" method="post">
 
 {{else}}
 
 <h1>Cadastre-se</h1>
-<form action="/jogo/novo" method="post">
+<form action="/jogos/novo" method="post">
 
 {{/if}}
     <div>
-         <label for="nickname">: </label>
-         <input type="text" id="nickname" name="nickname" value="{{usuario.nickname}}"></inpit>
+         <label for="titulo">Titulo: </label>
+         <input type="text" id="titulo" name="titulo" value="{{jogo.titulo}}"></inpit>
      </div>
      <br/>
      <div>
-         <label for="nome">: </label>
-         <input type="text" id="nome" name="nome" value="{{usuario.nome}}"></inpit>
-    </div>
-     <div>
-         <label for="nome">m </label>
-         <input type="text" id="nome" name="nome" value="{{usuario.nome}}"></inpit>
+         <label for="descricao">Descrição: </label>
+         <input type="text" id="descricao" name="descricao" value="{{jogo.descricao}}"></inpit>
     </div>
     <br/>
-{{#if usuario}}
+     <div>
+         <label for="precoBase">Preço: </label>
+         <input type="text" id="precoBase" name="precoBase" value="{{jogo.orecoBase}}"></inpit>
+    </div>
+    <br/>
+{{#if jogo}}
     <input type="submit" value="Salvar"/>
 {{else}}
     <input type="submit" value="Cadastrar"/>

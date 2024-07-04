@@ -10,11 +10,11 @@ const Cartao = db.define(
       allowNull: false,
     },
     nome: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(35),
       allowNull: false,
     },
     codSeguranca: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(3),
       allowNull: false,
     },
   },

@@ -22,7 +22,7 @@
 
                 <form action="/usuarios/excluir" method="post">
                   
-                    <input type="hidden" value="{{this.id}}"/>
+                    <input type="hidden" value="{{this.id}}" name="id"/>
                     <input type="submit" value="Excluir"/>
                 </form>
                 <a href="/usuarios/{{this.id}}/cartoes">Cartoes</a>
